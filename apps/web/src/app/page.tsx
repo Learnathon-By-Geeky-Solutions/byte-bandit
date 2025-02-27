@@ -7,6 +7,17 @@ import {TEXTS} from "@/lib/constants";
 import {MoveRight} from "lucide-react";
 import Link from "next/link";
 
+/**
+ * Renders the application's landing page.
+ *
+ * This component displays a full-screen layout featuring:
+ * - A navigation bar at the top.
+ * - An animated section with main and subheadings sourced from a centralized text configuration.
+ * - A call-to-action button that navigates to the login page, enhanced with hover animations.
+ * - A mode toggle for switching UI themes, visible on larger screens.
+ *
+ * Animations are implemented using framer-motion, creating subtle fade-in and slide-up effects with a blur transition.
+ */
 export default function Home() {
     return (
         <div className="h-screen w-full">

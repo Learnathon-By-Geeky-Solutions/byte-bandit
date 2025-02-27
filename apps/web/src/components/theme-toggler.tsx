@@ -7,6 +7,17 @@ import {useTheme} from "next-themes"
 import {Button} from "@/components/ui/button"
 import {cn} from "@/lib/utils";
 
+/**
+ * A toggle button for switching between light and dark themes.
+ *
+ * This component uses the `useTheme` hook to read and update the current theme. It postpones rendering
+ * until after mounting to avoid issues with server-side rendering. When clicked, it toggles the theme between
+ * 'dark' and 'light', updating its appearance accordingly.
+ *
+ * @param className Optional CSS class names for additional styling.
+ *
+ * @returns A button element that toggles the application's theme.
+ */
 export function ModeToggle({className}: { className?: string }) {
     const {theme, setTheme} = useTheme()
     const [mounted, setMounted] = React.useState(false);

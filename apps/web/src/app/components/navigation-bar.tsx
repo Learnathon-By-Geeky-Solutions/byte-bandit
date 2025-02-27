@@ -6,6 +6,14 @@ import logo from "../../../public/logo.svg";
 import Link from "next/link";
 import {motion} from 'framer-motion';
 
+/**
+ * Animated navigation bar component.
+ *
+ * Renders a responsive navigation bar featuring a clickable logo and title directing to the home page, along with navigation links to the Docs, Pricing, and Login pages.
+ * The component uses Framer Motion to animate its entry from a hidden state (with reduced opacity, a vertical offset, increased scale, and a blur effect) to a visible state.
+ *
+ * @returns A React element representing the animated navigation bar.
+ */
 function NavigationBar() {
     const variants = {
         hidden: {opacity: 0, y: -20, scale: 1.2, filter: 'blur(10px)'},

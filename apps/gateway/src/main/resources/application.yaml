@@ -5,7 +5,6 @@ spring:
         active: dev
 server:
     port: 8084
-
 eureka:
     client:
         service-url:

@@ -56,6 +56,7 @@ public class JwtFilter extends OncePerRequestFilter {
         final String userEmail;
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            // todo: Consider returning an explicit 401 when missing or malformed Bearer token.
             filterChain.doFilter(request, response);
             return;
         }

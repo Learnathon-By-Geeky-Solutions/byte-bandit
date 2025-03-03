@@ -15,3 +15,11 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka/
+
+application:
+  security:
+    jwt:
+      secret: ${secrets.security.jwt.secret}
+      expiration: ${secrets.security.jwt.expiration}
+  bcrypt:
+    strength: ${secrets.bcrypt.strength}

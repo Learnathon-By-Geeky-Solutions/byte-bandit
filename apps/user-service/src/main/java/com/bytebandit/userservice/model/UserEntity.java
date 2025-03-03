@@ -19,6 +19,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * UserDetails is an interface that Spring Security uses to represent user details.
+ * It contains information about the user such as username, password, authorities, etc.
+ * Principal is an interface that represents the identity of a user.
+ * It is used to represent the user in the context of authentication.
+ */
 @Entity
 @Getter
 @Setter
@@ -26,14 +32,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @Table(name = "users")
 @EntityListeners(AuditingEntityListener.class)
-
-/*
-    * UserDetails is an interface that Spring Security uses to represent user details.
-    * It contains information about the user such as username, password, authorities, etc.
-    * Principal is an interface that represents the identity of a user.
-    * It is used to represent the user in the context of authentication.
- */
-
 public class UserEntity implements UserDetails, Principal {
 
     @Id

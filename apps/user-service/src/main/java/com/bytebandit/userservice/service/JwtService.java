@@ -16,6 +16,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
+/**
+ * Service class responsible for generating, validating, and extracting information from JWT tokens.
+ * Provides utility methods to interact with JWT tokens, including creation, validation, and claim extraction.
+ *
+ * Purpose:
+ * - Handles JWT token creation, validation, and extraction of claims.
+ * - Provides methods to generate tokens for user authentication and validate the integrity of received tokens.
+ * - Extracts essential information from the token, such as username and expiration date.
+ *
+ */
 
 @Service
 public class JwtService {
@@ -26,14 +36,13 @@ public class JwtService {
     @Value("${application.security.jwt.secret}")
     private String secretKey;
 
+    /**
+     * Generates a JWT token for the given {@link UserDetails}.
+     * This method uses default claims to generate the token.
+     * @param userDetails {@link UserDetails} - The user details containing user-specific information for token generation.
+     * @return {@link String} - The generated JWT token.
+     */
     public String generateToken(UserDetails userDetails) {
-
-        /*
-            *  initially not adding any claims.
-            *  The purpose of having this method signature
-            *  generate a token with just the default claims
-         */
-
         return generateToken(new HashMap<>(), userDetails);
     }
 
@@ -78,11 +87,10 @@ public class JwtService {
         return extractExpiration(token).before(new Date());
     }
 
-    /*
+    /**
         * This method is used to extract the claims from the JWT token.
         * The claims are the key-value pairs that are stored in the JWT token.
      */
-
     public <T> T extractClaims(String token, Function<Claims, T> claimResolver) {
         final Claims claims = extractAllClaims(token);
         return claimResolver.apply(claims);

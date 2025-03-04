@@ -20,11 +20,21 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * UserDetails is an interface that Spring Security uses to represent user details.
- * It contains information about the user such as username, password, authorities, etc.
- * Principal is an interface that represents the identity of a user.
- * It is used to represent the user in the context of authentication.
+ * Represents a user entity, implementing {@link UserDetails} and {@link Principal}.
+ * It is used to manage user-related data and is integrated with Spring Security for authentication.
+ *
+ * Purpose:
+ * - Maps to the `users` table in the database and stores user details.
+ * - Implements {@link UserDetails} to provide user-specific data required for authentication and authorization.
+ * - Implements {@link Principal} to represent the current user in the security context.
+ *
+ * The class uses {@link AuditingEntityListener} to automatically capture auditing information like creation and modification timestamps.
+ *
+ * Related to:
+ * - Implement {@link org.springframework.security.core.userdetails.UserDetailsService} to load user details from a database or external source.
+ *
  */
+
 @Entity
 @Getter
 @Setter
@@ -72,10 +82,10 @@ public class UserEntity implements UserDetails, Principal {
         return this.getEmail();
     }
 
-    /*
-        * will be needed when (if) we want to implement email verification
-    */
-
+    /**
+     * Returns {@code true}, indicating the user is enabled;
+     * useful when implementing email verification logic.
+     */
     @Override
     public boolean isEnabled() {
         return true;

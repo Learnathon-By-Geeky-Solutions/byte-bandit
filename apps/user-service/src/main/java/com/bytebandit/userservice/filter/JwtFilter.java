@@ -19,11 +19,14 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.List;
 
-/*
-    * This class is responsible for filtering the incoming requests based on Authorization header of
-    * incoming http requests and checking if the JWT is valid.
-    * If the JWT is valid, then the user is authenticated and the request is allowed to pass through.
-    * Otherwise, the request follows the normal flow.
+/**
+ * Custom filter that extends {@link OncePerRequestFilter} to handle JWT-based authentication in incoming HTTP requests.
+ * It verifies the JWT token and sets the authenticated user in the {@link SecurityContextHolder}.
+ *
+ * @see JwtService
+ * @see org.springframework.security.core.userdetails.UserDetailsService
+ * @see OncePerRequestFilter
+ * @see SecurityContextHolder
  */
 @Service
 @RequiredArgsConstructor
@@ -32,6 +35,32 @@ public class JwtFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
 
+    /**
+     * Purpose:
+     * - Intercepts incoming HTTP requests to validate JWT authentication.
+     * - Allows permitted routes to pass through without authentication checks.
+     * - Extracts and verifies JWT token from Authorization header.
+     * - Sets authenticated user in {@link SecurityContextHolder} if token is valid.
+     *
+     * Approach:
+     * - Defines a list of permitted routes that do not require authentication.
+     * - Extracts the `Authorization` header and checks for a Bearer token.
+     * - If the token is present, extracts the username using {@link JwtService}.
+     * - Loads user details using {@link org.springframework.security.core.userdetails.UserDetailsService}.
+     * - Validates the token and sets authentication in {@link SecurityContextHolder}.
+     * - Proceeds with the request filter chain after authentication checks.
+     *
+     * Alternative:
+     * - Use API Gateway for token validation instead of handling it in the filter.
+     * - Implement refresh tokens to prevent users from having to log in frequently.
+     * - Use session-based authentication instead of JWT if stateless authentication is not required.
+     *
+     * @param request {@link HttpServletRequest} - Incoming HTTP request.
+     * @param response {@link HttpServletResponse} - Outgoing HTTP response.
+     * @param filterChain {@link FilterChain} - Chain of filters in the request lifecycle.
+     * @throws ServletException If an error occurs during filtering.
+     * @throws IOException If an I/O error occurs while processing the request.
+     */
     @Override
     protected void doFilterInternal(
             @NonNull HttpServletRequest request,
@@ -43,10 +72,6 @@ public class JwtFilter extends OncePerRequestFilter {
                 "/api/v1/user/login",
                 "/api/v1/user/test"
                 );
-        /*
-         * If the request is for a permitted route, then we don't need to check for JWT.
-         * We can just let the request pass through.
-         */
         if (permittedRoutes.contains(request.getServletPath())) {
             filterChain.doFilter(request, response);
             return;

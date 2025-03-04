@@ -6,6 +6,10 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 
+/**
+ * Configuration class for setting up security settings in a Spring WebFlux application.
+ * It defines the security filter chain and authorization rules for incoming HTTP requests.
+ */
 @Configuration
 public class ProjectConfig {
 
@@ -16,7 +20,8 @@ public class ProjectConfig {
                 .authorizeExchange(
                         exchanges -> exchanges
                                 .pathMatchers(
-                                        "/api/v1/**"
+                                        "/api/v1/user/login",
+                                        "/api/v1/user/register"
                                 ).permitAll()
                                 .anyExchange().authenticated()
                 );

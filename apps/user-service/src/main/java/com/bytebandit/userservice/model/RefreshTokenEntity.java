@@ -12,6 +12,15 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.sql.Timestamp;
 import java.util.UUID;
 
+/**
+ * Represents a refresh token entity that is used for managing JWT refresh tokens.
+ *
+ * Approach:
+ * - Contains a `refreshToken` string to store the actual refresh token.
+ * - Defines a one-to-one relationship with {@link UserEntity} to link each refresh token to a specific user.
+ *
+ */
+
 @Entity
 @Getter
 @Setter

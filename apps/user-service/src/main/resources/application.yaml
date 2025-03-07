@@ -8,7 +8,9 @@ spring:
     driver-class-name: org.postgresql.Driver
   config:
     import: classpath:secrets.yml
-
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
 server:
   port: 8083
 eureka:
@@ -21,5 +23,7 @@ application:
     jwt:
       secret: ${secrets.security.jwt.secret}
       expiration: ${secrets.security.jwt.expiration}
+    refresh:
+      expiration: ${secrets.security.refresh.expiration}
   bcrypt:
     strength: ${secrets.bcrypt.strength}

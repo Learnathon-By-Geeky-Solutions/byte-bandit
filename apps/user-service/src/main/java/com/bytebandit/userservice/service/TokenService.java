@@ -7,7 +7,6 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
 
 import java.security.Key;
 import java.util.Date;
@@ -16,22 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-/**
- * Service class responsible for generating, validating, and extracting information from JWT tokens.
- * Provides utility methods to interact with JWT tokens, including creation, validation, and claim extraction.
- *
- * Purpose:
- * - Handles JWT token creation, validation, and extraction of claims.
- * - Provides methods to generate tokens for user authentication and validate the integrity of received tokens.
- * - Extracts essential information from the token, such as username and expiration date.
- *
- */
-
-@Service
-public class JwtService {
-
-    @Value("${application.security.jwt.expiration}")
-    private long jwtExpiration;
+public abstract class TokenService {
 
     @Value("${application.security.jwt.secret}")
     private String secretKey;
@@ -46,11 +30,9 @@ public class JwtService {
         return generateToken(new HashMap<>(), userDetails);
     }
 
-    private String generateToken(Map<String, Object> claims, UserDetails userDetails) {
-        return buildToken(claims, userDetails, jwtExpiration);
-    }
+    public abstract String generateToken(Map<String, Object> claims, UserDetails userDetails);
 
-    private String buildToken(
+    public String buildToken(
             Map<String, Object> claims,
             UserDetails userDetails,
             long jwtExpiration
@@ -70,7 +52,7 @@ public class JwtService {
                 .compact();
     }
 
-    private Key getSignInKey() {
+    public Key getSignInKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
@@ -88,15 +70,15 @@ public class JwtService {
     }
 
     /**
-        * This method is used to extract the claims from the JWT token.
-        * The claims are the key-value pairs that are stored in the JWT token.
+     * This method is used to extract the claims from the JWT token.
+     * The claims are the key-value pairs that are stored in the JWT token.
      */
     public <T> T extractClaims(String token, Function<Claims, T> claimResolver) {
         final Claims claims = extractAllClaims(token);
         return claimResolver.apply(claims);
     }
 
-    private Claims extractAllClaims(String token) {
+    public Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(getSignInKey())
                 .build()

@@ -23,4 +23,11 @@ public class CustomUserDetailsService implements UserDetailsService {
                 () -> new UsernameNotFoundException("User with email " + userEmail + " not found!")
         );
     }
+
+    /** loadUserByUserName does the same thing,
+      * this method is for keeping the method consistent
+     */
+    public UserDetails loadUserByUserEmail(String userEmail) throws UsernameNotFoundException {
+        return loadUserByUsername(userEmail);
+    }
 }

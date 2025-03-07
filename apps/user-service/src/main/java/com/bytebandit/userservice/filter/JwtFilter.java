@@ -1,6 +1,6 @@
 package com.bytebandit.userservice.filter;
 
-import com.bytebandit.userservice.service.JwtService;
+import com.bytebandit.userservice.service.JwtTokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,7 +23,7 @@ import java.util.List;
  * Custom filter that extends {@link OncePerRequestFilter} to handle JWT-based authentication in incoming HTTP requests.
  * It verifies the JWT token and sets the authenticated user in the {@link SecurityContextHolder}.
  *
- * @see JwtService
+ * @see JwtTokenService
  * @see org.springframework.security.core.userdetails.UserDetailsService
  * @see OncePerRequestFilter
  * @see SecurityContextHolder
@@ -32,7 +32,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
 
-    private final JwtService jwtService;
+    private final JwtTokenService jwtTokenService;
     private final UserDetailsService userDetailsService;
 
     /**
@@ -45,7 +45,7 @@ public class JwtFilter extends OncePerRequestFilter {
      * Approach:
      * - Defines a list of permitted routes that do not require authentication.
      * - Extracts the `Authorization` header and checks for a Bearer token.
-     * - If the token is present, extracts the username using {@link JwtService}.
+     * - If the token is present, extracts the username using {@link JwtTokenService}.
      * - Loads user details using {@link org.springframework.security.core.userdetails.UserDetailsService}.
      * - Validates the token and sets authentication in {@link SecurityContextHolder}.
      * - Proceeds with the request filter chain after authentication checks.
@@ -86,11 +86,11 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
         jwt = authHeader.substring(7);
-        userEmail = jwtService.extractUsername(jwt);
+        userEmail = jwtTokenService.extractUsername(jwt);
 
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
-            if (jwtService.isValidToken(jwt, userDetails)) {
+            if (jwtTokenService.isValidToken(jwt, userDetails)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,

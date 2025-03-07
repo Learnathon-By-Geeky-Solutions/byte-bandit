@@ -3,10 +3,7 @@ package com.bytebandit.userservice.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -41,6 +38,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "users")
+@Builder
 @EntityListeners(AuditingEntityListener.class)
 public class UserEntity implements UserDetails, Principal {
 
@@ -70,7 +68,12 @@ public class UserEntity implements UserDetails, Principal {
     private Timestamp updatedAt;
 
     @Column(name = "is_enabled")
-    private Boolean isEnabled;
+    private Boolean isEnabled = true;
+
+    @PrePersist
+    protected void onCreate() {
+        this.isEnabled = true;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -88,7 +91,7 @@ public class UserEntity implements UserDetails, Principal {
      */
     @Override
     public boolean isEnabled() {
-        return true;
+        return this.isEnabled;
     }
 
     @Override

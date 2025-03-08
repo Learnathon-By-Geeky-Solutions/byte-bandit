@@ -3,23 +3,23 @@ package com.bytebandit.userservice.util;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.experimental.UtilityClass;
-import org.springframework.beans.factory.annotation.Value;
 
 @UtilityClass
 public class CookieTokenUtil {
 
     public static void saveTokenInCookie(
-            String jwtToken,
+            String token,
             String name,
             long expiration,
             HttpServletResponse response
     ) {
-        Cookie jwtCookie = new Cookie(name, jwtToken);
-        jwtCookie.setMaxAge((int) (expiration / 1000));
-        jwtCookie.setPath("/");
-        jwtCookie.setDomain("");
-        jwtCookie.setHttpOnly(true);
-        jwtCookie.setSecure(false);
-        response.addCookie(jwtCookie);
+        Cookie cookie = new Cookie(name, token);
+        cookie.setMaxAge((int) (expiration / 1000));
+        cookie.setPath("/");
+        cookie.setDomain("localhost");
+        cookie.setHttpOnly(true);
+        cookie.setSecure(false);
+        cookie.setAttribute("SameSite", "None");
+        response.addCookie(cookie);
     }
 }

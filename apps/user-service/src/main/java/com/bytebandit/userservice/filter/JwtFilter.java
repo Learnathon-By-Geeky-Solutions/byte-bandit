@@ -39,16 +39,8 @@ public class JwtFilter extends OncePerRequestFilter {
      * Purpose:
      * - Intercepts incoming HTTP requests to validate JWT authentication.
      * - Allows permitted routes to pass through without authentication checks.
-     * - Extracts and verifies JWT token from Authorization header.
+     * - Extracts and verifies JWT token from {@link Cookie}.
      * - Sets authenticated user in {@link SecurityContextHolder} if token is valid.
-     *
-     * Approach:
-     * - Defines a list of permitted routes that do not require authentication.
-     * - Extracts the `Authorization` header and checks for a Bearer token.
-     * - If the token is present, extracts the username using {@link JwtTokenService}.
-     * - Loads user details using {@link org.springframework.security.core.userdetails.UserDetailsService}.
-     * - Validates the token and sets authentication in {@link SecurityContextHolder}.
-     * - Proceeds with the request filter chain after authentication checks.
      *
      * Alternative:
      * - Use API Gateway for token validation instead of handling it in the filter.
@@ -59,7 +51,6 @@ public class JwtFilter extends OncePerRequestFilter {
      * @param response {@link HttpServletResponse} - Outgoing HTTP response.
      * @param filterChain {@link FilterChain} - Chain of filters in the request lifecycle.
      * @throws ServletException If an error occurs during filtering.
-     * @throws IOException If an I/O error occurs while processing the request.
      */
     @Override
     protected void doFilterInternal(

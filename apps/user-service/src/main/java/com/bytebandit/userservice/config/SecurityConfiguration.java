@@ -79,9 +79,18 @@ public class SecurityConfiguration {
      * @return {@link SecurityFilterChain} - The configured security filter chain.
      * @throws Exception If any error occurs during configuration.
      */
+    /**
+     * note:
+     * *No need to setup CORS, CSRF here, i.e. in each microservices*
+     * *It is already handled in the API Gateway*
+     * ToDo: expose only gateway fo client (frontend), every other
+     * server should be hidden from the client
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
+                .cors(AbstractHttpConfigurer::disable)
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         req -> req.requestMatchers(
                                 "/api/v1/user/login",

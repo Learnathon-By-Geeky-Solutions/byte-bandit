@@ -18,7 +18,7 @@ public class CookieTokenUtil {
         cookie.setPath("/");
         cookie.setDomain("localhost");
         cookie.setHttpOnly(true);
-        cookie.setSecure(false);
+        cookie.setSecure(true);
         cookie.setAttribute("SameSite", "None");
         response.addCookie(cookie);
     }

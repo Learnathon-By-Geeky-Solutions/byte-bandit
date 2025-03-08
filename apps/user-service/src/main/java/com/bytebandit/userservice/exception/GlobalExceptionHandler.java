@@ -1,7 +1,6 @@
 package com.bytebandit.userservice.exception;
 
 import com.bytebandit.userservice.dto.response.ErrorResponseDto;
-import org.apache.http.auth.InvalidCredentialsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.HashMap;
 import java.util.Map;
 
-// ToDo; Implement the GlobalExceptionHandler class
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -49,7 +47,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<ErrorResponseDto> credentialMisMatchException(InvalidCredentialsException ex) {
+    public ResponseEntity<ErrorResponseDto> credentialMisMatchException(BadCredentialsException ex) {
         ErrorResponseDto errorResponse = ErrorResponseDto.builder()
                 .status(HttpStatus.UNAUTHORIZED.value())
                 .message(ex.getMessage())
@@ -59,7 +57,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponseDto> handleGlobalException(Exception ex) {
-        ErrorResponseDto errorResponse = new ErrorResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), "An unexpected error occurred");
+        ErrorResponseDto errorResponse = new ErrorResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), "An unexpected error occurred" + ex.getMessage());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
     }
 

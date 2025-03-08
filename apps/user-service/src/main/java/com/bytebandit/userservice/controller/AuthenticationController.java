@@ -27,12 +27,14 @@ public class AuthenticationController {
     public ResponseEntity<?> registerUser(
             @RequestBody @Validated RegisterRequestDto registerRequestDto
     ) {
+        log.info("AuthenticationController | registerUser");
         RegisterResponseDto registeredUser = authService.registerUser(registerRequestDto);
+        log.info("Registration successful for user: {}", registerRequestDto.getEmail());
         return ResponseEntity.status(HttpStatus.CREATED).body(registeredUser);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> loginUser(
+    public ResponseEntity<String> loginUser(
             @RequestBody @Validated LoginRequestDto loginRequestDto,
             HttpServletResponse response
     ) {

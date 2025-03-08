@@ -23,7 +23,6 @@ public class RefreshTokenService extends TokenService{
 
     private final UserRepository userRepository;
 
-    // todo: inefficient methods
     public RefreshTokenEntity generateAndSaveRefreshToken(UserDetails user) {
         UserEntity userEntity = userRepository.findUserEntityByEmail(user.getUsername())
                 .orElseThrow(() -> new UserNotFoundException("User not found"));

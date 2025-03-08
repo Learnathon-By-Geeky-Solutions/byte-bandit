@@ -1,17 +1,10 @@
 package com.bytebandit.userservice.dto.response;
 
 import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * ToDo: Implement the ErrorResponseDto class
- */
-@Getter
-@Setter
 @Builder
 public class ErrorResponseDto {
     private final int status;

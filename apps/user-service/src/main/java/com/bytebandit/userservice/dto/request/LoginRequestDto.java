@@ -2,15 +2,12 @@ package com.bytebandit.userservice.dto.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 @Data
-@Getter
-@Setter
 @Builder
 public class LoginRequestDto {
 
@@ -19,6 +16,11 @@ public class LoginRequestDto {
     private String email;
 
     @NotNull(message = "Password is required")
-    @Size(min = 6, message = "Password should be at least 6 characters")
+    @Size(min = 8, message = "Password should be at least 8 characters")
+    @Pattern(
+            regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$",
+            message = "Password must be at least 8 characters long and contain at least one digit, " +
+                    "one uppercase letter, one lowercase letter, and one special character"
+    )
     private String password;
 }

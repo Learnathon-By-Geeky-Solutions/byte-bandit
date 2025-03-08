@@ -8,11 +8,8 @@ import lombok.Setter;
 import java.sql.Timestamp;
 
 @Data
-@Getter
-@Setter
 @Builder
 public class RegisterResponseDto {
-
     private String email;
     private Timestamp createdAt;
 }

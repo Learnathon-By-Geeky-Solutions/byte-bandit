@@ -43,7 +43,6 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .build();
         userRepository.save(newUser);
-        newUser.setPassword("");
         return newUser;
     }
 

@@ -46,5 +46,5 @@ public class RefreshTokenEntity {
 
     @UpdateTimestamp
     @Column(name = "validated_at", nullable = false)
-    private Timestamp validatedAt;
+    private Timestamp lastValidatedAt;
 }

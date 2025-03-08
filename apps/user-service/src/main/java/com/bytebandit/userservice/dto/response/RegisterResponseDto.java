@@ -10,7 +10,6 @@ import java.sql.Timestamp;
 @Data
 @Builder
 public class RegisterResponseDto {
-
     private String email;
     private Timestamp createdAt;
 }

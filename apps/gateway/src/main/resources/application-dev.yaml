@@ -6,3 +6,20 @@ spring:
           uri: http://localhost:8083
           predicates:
             - Path=/api/v1/user/**
+          metadata:
+            response-headers:
+              - "Access-Control-Allow-Origin=http://localhost:3000"
+              - "Access-Control-Allow-Credentials=true"
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:3000"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+            allowedHeaders: "*"
+            allow-credentials: true

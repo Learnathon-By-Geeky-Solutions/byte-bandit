@@ -11,6 +11,8 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
+  profiles:
+    active: dev
 server:
   port: 8083
 eureka:

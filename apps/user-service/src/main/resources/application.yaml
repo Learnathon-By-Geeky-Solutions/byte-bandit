@@ -8,10 +8,24 @@ spring:
     driver-class-name: org.postgresql.Driver
   config:
     import: classpath:secrets.yml
-
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+  profiles:
+    active: dev
 server:
   port: 8083
 eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka/
+
+application:
+  security:
+    jwt:
+      secret: ${secrets.security.jwt.secret}
+      expiration: ${secrets.security.jwt.expiration}
+    refresh:
+      expiration: ${secrets.security.refresh.expiration}
+  bcrypt:
+    strength: ${secrets.bcrypt.strength}

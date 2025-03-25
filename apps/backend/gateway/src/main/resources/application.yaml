@@ -1,6 +1,20 @@
 spring:
   application:
     name: gateway
+  datasource:
+    url: ${secrets.datasource.url}
+    username: ${secrets.datasource.username}
+    password: ${secrets.datasource.password}
+    driver-class-name: org.postgresql.Driver
+  config:
+    import: classpath:secrets.yml
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    defer-datasource-initialization: true
+  profiles:
+    active: dev
 management:
   endpoints:
     web:

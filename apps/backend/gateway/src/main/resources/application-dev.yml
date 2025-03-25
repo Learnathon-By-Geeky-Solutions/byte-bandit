@@ -1,0 +1,6 @@
+spring:
+  jpa:
+    show-sql: true
+  sql:
+    init:
+      schema-locations: classpath:schema.sql

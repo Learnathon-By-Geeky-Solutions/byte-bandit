@@ -9,7 +9,7 @@ import org.springframework.test.context.ActiveProfiles;
 class GatewayApplicationTests {
 
     @Test
-    void contextLoads() { /// Non-compliant - method is empty
+    void contextLoads() { // Non-compliant - method is empty
     }
 
 }

@@ -9,6 +9,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 
 public abstract class EmailService {
 
+    /** This method is a generic method to send mail message. */
     protected void sendMailMessage(
         JavaMailSender mailSender,
         String sendEmailTo,

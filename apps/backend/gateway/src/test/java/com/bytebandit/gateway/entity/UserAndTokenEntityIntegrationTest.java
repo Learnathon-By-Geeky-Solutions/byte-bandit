@@ -1,11 +1,9 @@
-package com.bytebandit.userservice.entity;
+package com.bytebandit.gateway.entity;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-import com.bytebandit.userservice.enums.TokenType;
-import com.bytebandit.userservice.model.TokenEntity;
-import com.bytebandit.userservice.model.UserEntity;
+import com.bytebandit.gateway.enums.TokenType;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -30,19 +28,19 @@ class UserAndTokenEntityIntegrationTest {
     private PasswordEncoder passwordEncoder;
 
     /**
-     *  Test that ensures when a user is deleted, all associated tokens are also deleted.
+     * Test that ensures when a user is deleted, all associated tokens are also deleted.
      */
     @Test
     void whenUserIsDeleted_thenAssociatedTokensAreDeleted() {
         UserEntity user = createAndPersistUser();
 
         TokenEntity tokenEntity = TokenEntity.builder()
-            .tokenHash(passwordEncoder.encode(UUID.randomUUID().toString()))
-            .type(TokenType.REFRESH)
-            .expiresAt(Timestamp.valueOf(LocalDateTime.now().plusDays(1)))
-            .user(user)
-            .used(false)
-            .build();
+                .tokenHash(passwordEncoder.encode(UUID.randomUUID().toString()))
+                .type(TokenType.REFRESH)
+                .expiresAt(Timestamp.valueOf(LocalDateTime.now().plusDays(1)))
+                .user(user)
+                .used(false)
+                .build();
         user.getTokens().add(tokenEntity);
 
         entityManager.persistAndFlush(tokenEntity);
@@ -63,20 +61,20 @@ class UserAndTokenEntityIntegrationTest {
         UserEntity user = createAndPersistUser();
 
         TokenEntity token1 = TokenEntity.builder()
-            .tokenHash(passwordEncoder.encode(UUID.randomUUID().toString()))
-            .type(TokenType.EMAIL_VERIFICATION)
-            .expiresAt(Timestamp.valueOf(LocalDateTime.now().plusDays(1)))
-            .user(user)
-            .used(false)
-            .build();
+                .tokenHash(passwordEncoder.encode(UUID.randomUUID().toString()))
+                .type(TokenType.EMAIL_VERIFICATION)
+                .expiresAt(Timestamp.valueOf(LocalDateTime.now().plusDays(1)))
+                .user(user)
+                .used(false)
+                .build();
 
         TokenEntity token2 = TokenEntity.builder()
-            .tokenHash(passwordEncoder.encode(UUID.randomUUID().toString()))
-            .type(TokenType.PASSWORD_RESET)
-            .expiresAt(Timestamp.valueOf(LocalDateTime.now().plusDays(2)))
-            .user(user)
-            .used(false)
-            .build();
+                .tokenHash(passwordEncoder.encode(UUID.randomUUID().toString()))
+                .type(TokenType.PASSWORD_RESET)
+                .expiresAt(Timestamp.valueOf(LocalDateTime.now().plusDays(2)))
+                .user(user)
+                .used(false)
+                .build();
 
         user.getTokens().add(token1);
         user.getTokens().add(token2);

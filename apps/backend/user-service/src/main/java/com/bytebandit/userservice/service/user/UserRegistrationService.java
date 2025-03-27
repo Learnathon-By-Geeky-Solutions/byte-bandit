@@ -123,7 +123,7 @@ public class UserRegistrationService implements IUserRegistrationService {
                     USER_NOT_FOUND_PREFIX + userId + USER_NOT_FOUND_SUFFIX
                 ));
         } catch (OptimisticLockException e) {
-            throw new ConcurrentModificationException(
+            throw new OptimisticLockException(
                 "User was updated concurrently. Please retry.", e);
         }
     }

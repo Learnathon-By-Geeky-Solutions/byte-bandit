@@ -1,21 +1,23 @@
-package com.bytebandit.userservice.service;
+package com.bytebandit.userservice.service.user;
 
 import com.bytebandit.userservice.dto.UserDto;
-import com.bytebandit.userservice.mapper.UserMapper;
-import com.bytebandit.userservice.model.UserEntity;
-import com.bytebandit.userservice.request.UpdateUserRequest;
-import com.bytebandit.userservice.response.UserRegistrationResponse;
 import com.bytebandit.userservice.enums.TokenType;
 import com.bytebandit.userservice.exception.UserAlreadyExistsException;
+import com.bytebandit.userservice.mapper.UserMapper;
+import com.bytebandit.userservice.model.UserEntity;
 import com.bytebandit.userservice.projection.CreateUserAndTokenProjection;
 import com.bytebandit.userservice.repository.UserRepository;
+import com.bytebandit.userservice.request.UpdateUserRequest;
+import com.bytebandit.userservice.request.UserRegistrationRequest;
+import com.bytebandit.userservice.service.RegistrationEmailService;
+import jakarta.persistence.EntityNotFoundException;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
-
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,8 +25,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 @Service
 @RequiredArgsConstructor
-public class UserRegistrationService {
-
+public class UserRegistrationService implements IUserRegistrationService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final TransactionTemplate transactionTemplate;
@@ -32,6 +33,7 @@ public class UserRegistrationService {
     private final UserMapper userMapper;
     private static final String USER_NOT_FOUND_PREFIX = "User with Id : ";
     private static final String USER_NOT_FOUND_SUFFIX = " not found!";
+    private static final Logger logger = LoggerFactory.getLogger(UserRegistrationService.class);
 
 
     /**
@@ -46,7 +48,8 @@ public class UserRegistrationService {
      * @throws UserAlreadyExistsException if a user with the provided email already exists.
      * @throws IllegalStateException      if the user registration process fails.
      */
-    public UserRegistrationResponse register(
+    @Override
+    public UserDto register(
         UserRegistrationRequest registrationRequest
     ) {
         String passwordHash = passwordEncoder.encode(registrationRequest.getPassword());
@@ -72,7 +75,7 @@ public class UserRegistrationService {
                 userAndToken,
                 token.toString()
             );
-            return new UserRegistrationResponse(
+            return new UserDto(
                 userAndToken.getId(),
                 userAndToken.getFullName(),
                 userAndToken.getEmail(),
@@ -80,6 +83,7 @@ public class UserRegistrationService {
                 userAndToken.getCreatedAt()
             );
         } catch (DataIntegrityViolationException e) {
+            logger.error("Data integrity violation: {}", e.getMessage());
             throw new UserAlreadyExistsException("User with provided email already exists.", e);
         }
     }
@@ -108,23 +112,26 @@ public class UserRegistrationService {
             }
             return userRepository.save(existingUser);
         }).orElseThrow(
-                () -> new EntityNotFoundException(USER_NOT_FOUND_PREFIX + userId + USER_NOT_FOUND_SUFFIX)
-        );
+            () -> new EntityNotFoundException(
+                USER_NOT_FOUND_PREFIX + userId + USER_NOT_FOUND_SUFFIX
+            ));
     }
 
     @Override
     public UserEntity getUserById(UUID userId) {
         return userRepository.findById(userId).orElseThrow(
-                () -> new EntityNotFoundException(USER_NOT_FOUND_PREFIX + userId +USER_NOT_FOUND_SUFFIX)
-        );
+            () -> new EntityNotFoundException(
+                USER_NOT_FOUND_PREFIX + userId + USER_NOT_FOUND_SUFFIX
+            ));
     }
 
     @Override
     public void deleteUserById(UUID userId) {
         userRepository.findById(userId).ifPresentOrElse(userRepository::delete,
-                () -> {
-                    throw new EntityNotFoundException(USER_NOT_FOUND_PREFIX + userId +USER_NOT_FOUND_SUFFIX);
-                }
+            () -> {
+                throw new EntityNotFoundException(
+                    USER_NOT_FOUND_PREFIX + userId + USER_NOT_FOUND_SUFFIX);
+            }
         );
 
     }

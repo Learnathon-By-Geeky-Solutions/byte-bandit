@@ -4,6 +4,7 @@ import com.bytebandit.userservice.mapper.UserMapper;
 import org.mapstruct.factory.Mappers;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -19,6 +20,7 @@ public class ProjectConfig {
     }
 
     /** Creates a user mapper bean. */
+    @Primary
     @Bean
     public UserMapper userMapper() {
         return Mappers.getMapper(UserMapper.class);

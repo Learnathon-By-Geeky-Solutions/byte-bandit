@@ -1,4 +1,4 @@
-package com.bytebandit.userservice.dto;
+package com.bytebandit.userservice.response;
 
 import java.sql.Timestamp;
 import java.util.UUID;

@@ -9,8 +9,12 @@ import java.util.UUID;
 public interface CreateUserAndTokenProjection {
 
     UUID getId();
+
     String getFullName();
+
     String getEmail();
+
     Boolean getVerified();
+
     Timestamp getCreatedAt();
 }

@@ -25,9 +25,9 @@ spring:
         starttls:
           enable: false
 api:
-  prefix: /api/v1/user
+  prefix: /api/v1
   host:
     uri: http://localhost:8084
 client:
   host:
-    uri: http://localhost:3030
+    uri: http://localhost:3000

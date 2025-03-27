@@ -1,10 +1,31 @@
 spring:
+  datasource:
+    url: ${secrets.datasource.url}
+    driver-class-name: org.postgresql.Driver
+    username: ${secrets.datasource.username}
+    password: ${secrets.datasource.password}
+  cloud:
+    discovery:
+      enabled: false
   jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
     show-sql: true
+  config:
+    import: classpath:secrets.yml
+  mail:
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          auth: false
+        starttls:
+          enable: false
 api:
-  prefix: /api/v1/user
+  prefix: /api/v1
   host:
     uri: http://localhost:8084
 client:
   host:
-    uri: http://localhost:3000
+    uri: http://localhost:3030

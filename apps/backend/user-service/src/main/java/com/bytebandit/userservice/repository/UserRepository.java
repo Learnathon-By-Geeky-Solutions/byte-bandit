@@ -24,3 +24,4 @@ public interface UserRepository extends JpaRepository<UserEntity, UUID> {
         @Param("expiresAt") java.sql.Timestamp expiresAt
     );
 }
+

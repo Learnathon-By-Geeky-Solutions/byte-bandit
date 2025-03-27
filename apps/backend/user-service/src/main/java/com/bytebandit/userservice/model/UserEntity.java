@@ -46,9 +46,11 @@ public class UserEntity implements UserDetails, Principal {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    /**
+     * Version field for optimistic locking to prevent concurrent modification conflicts.
+     */
     @Version
     private Long version;
-
     @Column(name = "email", unique = true)
     private String email;
 

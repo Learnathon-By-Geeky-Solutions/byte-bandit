@@ -39,6 +39,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 @EntityListeners(AuditingEntityListener.class)
 public class UserEntity implements UserDetails, Principal {
 
+    /**
+     * Serial version UID for maintaining serialization compatibility.
+     */
     @Serial
     private static final long serialVersionUID = 1L;
     @Id

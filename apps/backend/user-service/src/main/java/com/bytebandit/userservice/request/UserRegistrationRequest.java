@@ -1,0 +1,27 @@
+package com.bytebandit.userservice.request;
+
+import com.bytebandit.userservice.annotation.ValidEmail;
+import com.bytebandit.userservice.annotation.ValidPassword;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.Builder;
+import lombok.AllArgsConstructor;
+
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class UserRegistrationRequest {
+
+    @NotNull
+    @Size(max = 20, message = "Username must be less than 20 characters")
+    private String fullName;
+
+    @ValidEmail
+    private String email;
+
+    @ValidPassword
+    private String password;
+}

@@ -1,7 +1,10 @@
 package com.bytebandit.userservice.service;
 
-import com.bytebandit.userservice.dto.UserRegistrationRequest;
-import com.bytebandit.userservice.dto.UserRegistrationResponse;
+import com.bytebandit.userservice.dto.UserDto;
+import com.bytebandit.userservice.mapper.UserMapper;
+import com.bytebandit.userservice.model.UserEntity;
+import com.bytebandit.userservice.request.UpdateUserRequest;
+import com.bytebandit.userservice.response.UserRegistrationResponse;
 import com.bytebandit.userservice.enums.TokenType;
 import com.bytebandit.userservice.exception.UserAlreadyExistsException;
 import com.bytebandit.userservice.projection.CreateUserAndTokenProjection;
@@ -10,6 +13,8 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
+
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,6 +29,10 @@ public class UserRegistrationService {
     private final PasswordEncoder passwordEncoder;
     private final TransactionTemplate transactionTemplate;
     private final RegistrationEmailService registrationEmailService;
+    private final UserMapper userMapper;
+    private static final String USER_NOT_FOUND_PREFIX = "User with Id : ";
+    private static final String USER_NOT_FOUND_SUFFIX = " not found!";
+
 
     /**
      * Registers a new user by creating user and token entries, sending a verification email, and
@@ -85,5 +94,43 @@ public class UserRegistrationService {
             token,
             user.getId()
         );
+    }
+
+
+    @Override
+    public UserEntity updateUser(UpdateUserRequest request, UUID userId) {
+        return userRepository.findById(userId).map(existingUser -> {
+            if (request.getFullName() != null) {
+                existingUser.setFullName(request.getFullName());
+            }
+            if (request.getPassword() != null) {
+                existingUser.setPasswordHash(passwordEncoder.encode(request.getPassword()));
+            }
+            return userRepository.save(existingUser);
+        }).orElseThrow(
+                () -> new EntityNotFoundException(USER_NOT_FOUND_PREFIX + userId + USER_NOT_FOUND_SUFFIX)
+        );
+    }
+
+    @Override
+    public UserEntity getUserById(UUID userId) {
+        return userRepository.findById(userId).orElseThrow(
+                () -> new EntityNotFoundException(USER_NOT_FOUND_PREFIX + userId +USER_NOT_FOUND_SUFFIX)
+        );
+    }
+
+    @Override
+    public void deleteUserById(UUID userId) {
+        userRepository.findById(userId).ifPresentOrElse(userRepository::delete,
+                () -> {
+                    throw new EntityNotFoundException(USER_NOT_FOUND_PREFIX + userId +USER_NOT_FOUND_SUFFIX);
+                }
+        );
+
+    }
+
+    @Override
+    public UserDto convertToDto(UserEntity user) {
+        return userMapper.toUserRegistrationResponse(user);
     }
 }

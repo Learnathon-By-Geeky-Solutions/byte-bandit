@@ -11,9 +11,11 @@ import com.bytebandit.userservice.request.UpdateUserRequest;
 import com.bytebandit.userservice.request.UserRegistrationRequest;
 import com.bytebandit.userservice.service.RegistrationEmailService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.OptimisticLockException;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.ConcurrentModificationException;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -85,6 +87,10 @@ public class UserRegistrationService implements IUserRegistrationService {
         } catch (DataIntegrityViolationException e) {
             logger.error("Data integrity violation: {}", e.getMessage());
             throw new UserAlreadyExistsException("User with provided email already exists.", e);
+        } catch (Exception e) {
+            logger.error("Unexpected error during user registration: {}", e.getMessage());
+            throw new IllegalStateException(
+                "User registration process failed due to an unexpected error.", e);
         }
     }
 
@@ -103,18 +109,23 @@ public class UserRegistrationService implements IUserRegistrationService {
 
     @Override
     public UserEntity updateUser(UpdateUserRequest request, UUID userId) {
-        return userRepository.findById(userId).map(existingUser -> {
-            if (request.getFullName() != null) {
-                existingUser.setFullName(request.getFullName());
-            }
-            if (request.getPassword() != null) {
-                existingUser.setPasswordHash(passwordEncoder.encode(request.getPassword()));
-            }
-            return userRepository.save(existingUser);
-        }).orElseThrow(
-            () -> new EntityNotFoundException(
-                USER_NOT_FOUND_PREFIX + userId + USER_NOT_FOUND_SUFFIX
-            ));
+        try {
+            return userRepository.findById(userId).map(existingUser -> {
+                if (request.getFullName() != null) {
+                    existingUser.setFullName(request.getFullName());
+                }
+                if (request.getPassword() != null) {
+                    existingUser.setPasswordHash(passwordEncoder.encode(request.getPassword()));
+                }
+                return userRepository.save(existingUser);
+            }).orElseThrow(
+                () -> new EntityNotFoundException(
+                    USER_NOT_FOUND_PREFIX + userId + USER_NOT_FOUND_SUFFIX
+                ));
+        } catch (OptimisticLockException e) {
+            throw new ConcurrentModificationException(
+                "User was updated concurrently. Please retry.", e);
+        }
     }
 
     @Override

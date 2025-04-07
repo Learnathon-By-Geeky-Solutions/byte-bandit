@@ -22,7 +22,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
 @ActiveProfiles("test")
-class TokenServiceIT extends AbstractPostgresContainer {
+class TokenServiceTest extends AbstractPostgresContainer {
 
     @Autowired
     private TokenService tokenService;
@@ -122,8 +122,9 @@ class TokenServiceIT extends AbstractPostgresContainer {
     }
 
     /**
-     * This test verifies that the token is valid and can be used to extract the username and user ID
-     * from it. It checks if the extracted values match the expected values.
+     * This test verifies that the token is valid and can be used
+     * to extract the username and user ID from it.
+     * It checks if the extracted values match the expected values.
      */
     @Test
     void shouldGenerateValidateAndUpdateTokenSuccessfully() {
@@ -140,15 +141,17 @@ class TokenServiceIT extends AbstractPostgresContainer {
 
         tokenService.generateAndSaveRefreshToken(testUser, 1800, token);
 
-        Optional<TokenEntity> updated = tokenRepository.findByUserIdAndType(testUserId, TokenType.REFRESH);
+        Optional<TokenEntity> updated = tokenRepository.findByUserIdAndType(
+            testUserId,
+            TokenType.REFRESH
+        );
         assertThat(updated).isPresent();
         assertThat(updated.get().getTokenHash()).isNotEqualTo("dummy");
         assertThat(updated.get().getExpiresAt()).isAfter(Timestamp.from(Instant.now()));
     }
 
     /**
-     * This test verifies that the token is expired after a specified time period. It checks if the
-     * token is considered expired after waiting for the specified duration.
+     * This test verifies that the token is expired after a specified time period.
      */
     @Test
     void shouldThrowExceptionForExpiredToken() {

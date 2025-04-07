@@ -1,5 +1,6 @@
 package com.bytebandit.gateway.service;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
@@ -9,12 +10,16 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @Testcontainers
 public abstract class AbstractPostgresContainer {
 
+    static final Dotenv dotenv = Dotenv.configure()
+        .filename(".env") // optional, defaults to ".env"
+        .load();
+
     @Container
     static final PostgreSQLContainer<?> POSTGRESQL_CONTAINER = new PostgreSQLContainer<>(
         "postgres:17-alpine")
         .withDatabaseName("testdb")
         .withUsername("postgres")
-        .withPassword("postgres")
+        .withPassword(dotenv.get("TEST_DB_PASSWORD"))
         .withReuse(true);
 
     /**

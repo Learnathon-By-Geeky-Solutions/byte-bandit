@@ -7,7 +7,7 @@ import java.util.UUID;
  * this will be changed with Global ResponseObject
  * if there is one [:)].
  */
-public record UserRegistrationResponse(
+public record UserDto(
     UUID id,
     String fullName,
     String email,

@@ -1,4 +1,4 @@
-package com.bytebandit.userservice.dto;
+package com.bytebandit.userservice.request;
 
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.Size;

@@ -23,9 +23,9 @@ spring:
     properties:
       mail:
         smtp:
-          auth: false
+          auth: true
         starttls:
-          enable: false
+          enable: true
 api:
   prefix: ${TEST_API_PREFIX:/api/v1/user}
   host:

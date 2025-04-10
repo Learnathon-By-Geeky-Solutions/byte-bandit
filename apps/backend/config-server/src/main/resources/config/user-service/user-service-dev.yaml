@@ -9,7 +9,7 @@ spring:
     defer-datasource-initialization: true
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
   sql:
     init:
       mode: always
@@ -24,12 +24,6 @@ spring:
     port: ${DEV_MAIL_PORT}
     username: ${MAIL_USERNAME}
     password: ${MAIL_PASSWORD}
-    properties:
-      mail:
-        smtp:
-          auth: false
-          starttls:
-            enable: false
 api:
   prefix: ${DEV_API_PREFIX:/api/v1/user}
   host:

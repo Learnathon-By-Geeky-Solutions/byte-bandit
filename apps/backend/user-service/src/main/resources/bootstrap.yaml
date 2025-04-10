@@ -13,6 +13,14 @@ spring:
         max-attempts: 20
         max-interval: 15000
         initial-interval: 10000
+  mail:
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
 eureka:
   client:
     service-url:

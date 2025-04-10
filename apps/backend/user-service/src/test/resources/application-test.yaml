@@ -27,7 +27,7 @@ spring:
         starttls:
           enable: false
 api:
-  prefix: ${TEST_API_PREFIX:/api/v1/user}
+  prefix: ${TEST_API_PREFIX:/api/v1/users}
   host:
     uri: ${TEST_API_HOST_URI:http://localhost:8084}
 client:

@@ -16,9 +16,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UpdateUserRequest {
-
     @NotNull
-    @Size(max = 20, message = "Username must be less than 20 characters")
+    @Size(max = 20, message = "Full name must be less than 20 characters")
+    /**
+     * User's full name.
+     */
     private String fullName;
     /**
      * Password must meet requirements defined in ValidPassword annotation.

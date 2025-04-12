@@ -1,8 +1,6 @@
 package com.bytebandit.userservice.request;
 
 
-//import com.bytebandit.userservice.annotation.ValidPassword;
-
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lib.core.validation.ValidPassword;

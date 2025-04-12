@@ -67,13 +67,13 @@ public class UserRegistrationService implements IUserRegistrationService {
                 userAndToken,
                 token.toString()
             );
-            return UserDto.builder()
-                .id(userAndToken.getId())
-                .fullName(userAndToken.getFullName())
-                .email(userAndToken.getEmail())
-                .verified(userAndToken.getVerified())
-                .createdAt(userAndToken.getCreatedAt())
-                .build();
+            return new UserDto(
+                    userAndToken.getId(),
+                    userAndToken.getFullName(),
+                    userAndToken.getEmail(),
+                    false,
+                    userAndToken.getCreatedAt()
+                );
         } catch (DataIntegrityViolationException e) {
             logger.error("Data integrity violation: {}", e.getMessage());
             throw new UserAlreadyExistsException("User with provided email already exists.", e);
